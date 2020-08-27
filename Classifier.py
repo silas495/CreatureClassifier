@@ -58,9 +58,9 @@ def run_test_harness():
 	# create data generator
 	datagen = ImageDataGenerator(rescale=1.0/255.0)
 	# prepare iterator
-	train_it = datagen.flow_from_directory('trainen/',
+	train_it = datagen.flow_from_directory('train/',
 		class_mode='binary', batch_size=64, target_size=(200, 200))
-	test_it = datagen.flow_from_directory('testen/',
+	test_it = datagen.flow_from_directory('test/',
 		class_mode='binary', batch_size=64, target_size=(200, 200))
 	# fit model
 	history = model.fit_generator(train_it, steps_per_epoch=len(train_it),
