@@ -18,14 +18,14 @@ def load_image(filename):
 	return img
  
 # load an image and predict the class
-def run_example(filename):
+def run_example(filename, modelname):
 	# load the image
 	img = load_image(filename)
 	# load model
-	model = load_model('reemodel.h5')
+	model = load_model(modelname)
 	# predict the class
 	result = model.predict(img)
 	print(result[0])
  
 # entry point, run the example
-run_example(sys.argv[1])
+run_example(sys.argv[1], sys.argv[2])
