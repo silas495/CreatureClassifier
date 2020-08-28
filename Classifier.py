@@ -15,17 +15,21 @@ from keras.preprocessing.image import ImageDataGenerator
 # define cnn model
 def define_model():
 	model = Sequential()
-	model.add(Conv2D(32, (3, 3), activation='relu', kernel_initializer='he_uniform', padding='same', input_shape=(400, 400, 3)))
+	model.add(Conv2D(32, (3, 3), activation='relu', kernel_initializer='he_uniform', padding='same', input_shape=(200, 200, 3)))
 	model.add(MaxPooling2D((2, 2)))
 	model.add(Dropout(0.2))
 	model.add(Conv2D(64, (3, 3), activation='relu', kernel_initializer='he_uniform', padding='same'))
 	model.add(MaxPooling2D((2, 2)))
 	model.add(Dropout(0.2))
-	model.add(Conv2D(128, (3, 3), activation='relu', kernel_initializer='he_uniform', padding='same'))
-	model.add(MaxPooling2D((2, 2)))
-	model.add(Dropout(0.2))
+	# model.add(Conv2D(128, (3, 3), activation='relu', kernel_initializer='he_uniform', padding='same'))
+	# model.add(MaxPooling2D((2, 2)))
+	# model.add(Dropout(0.2))
 	model.add(Flatten())
-	model.add(Dense(128, activation='relu', kernel_initializer='he_uniform'))
+	model.add(Dense(256, activation='relu', kernel_initializer='he_uniform'))
+	model.add(Dropout(0.5))
+	model.add(Dense(1024, activation='relu', kernel_initializer='he_uniform'))
+	model.add(Dropout(0.5))
+	model.add(Dense(256, activation='relu', kernel_initializer='he_uniform'))	
 	model.add(Dropout(0.5))
 	model.add(Dense(2, activation='softmax'))
 	# compile model
@@ -59,12 +63,12 @@ def run_test_harness(folder, model_name):
 	datagen = ImageDataGenerator(rescale=1.0/255.0)
 	# prepare iterator
 	train_it = datagen.flow_from_directory(folder + '/train/',
-		class_mode='binary', batch_size=64, target_size=(400, 400))
+		class_mode='binary', batch_size=16, target_size=(200, 200))
 	test_it = datagen.flow_from_directory(folder + '/test/',
-		class_mode='binary', batch_size=64, target_size=(400, 400))
+		class_mode='binary', batch_size=16, target_size=(200, 200))
 	# fit model
 	history = model.fit_generator(train_it, steps_per_epoch=len(train_it),
-		validation_data=test_it, validation_steps=len(test_it), epochs=3, verbose=2)
+		validation_data=test_it, validation_steps=len(test_it), epochs=50, verbose=2)
 	# evaluate model
 	_, acc = model.evaluate_generator(test_it, steps=len(test_it), verbose=2)
 
@@ -75,3 +79,5 @@ def run_test_harness(folder, model_name):
  
 # entry point, run the test harness
 run_test_harness(sys.argv[1], sys.argv[2])
+
+input()
